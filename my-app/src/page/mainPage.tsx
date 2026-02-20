@@ -8,37 +8,29 @@ import robotAnimation from "../assets/Robot Futuristic Ai.json";
 import typingAnimation from "../assets/aiaia.json";
 import digitalAnimation from "../assets/Digital.json";
 
-const AI_ANIMATIONS = [robotAnimation, digitalAnimation]; // random moods after typing
+const AI_ANIMATIONS = [robotAnimation, digitalAnimation]; // animations to cycle
 
 export default function MainPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentMood, setCurrentMood] = useState<unknown>(robotAnimation);
   const [isTyping, setIsTyping] = useState(false);
 
-  // Random mood after bot finishes typing
-  useEffect(() => {
-  if (messages.length === 0) return;
-  const last = messages[messages.length - 1];
+ // Cycle animations every 10 sec (idle)
+useEffect(() => {
+  if (isTyping) return; // don't cycle while typing
 
-  if (last.role === "bot" && !isTyping) {
-    // defer to next tick to avoid synchronous setState warning
-    setTimeout(() => {
-      let nextMood;
+  const interval = setInterval(() => {
+    setCurrentMood((prev: unknown) => {
+      let next: unknown;
       do {
-        nextMood = AI_ANIMATIONS[Math.floor(Math.random() * AI_ANIMATIONS.length)];
-      } while (nextMood === currentMood);
-      setCurrentMood(nextMood);
-    }, 0);
-  }
-}, [messages, isTyping, currentMood]);
-  // Idle animation after 10 sec
-  useEffect(() => {
-    if (isTyping) return;
-    const idleTimer = setTimeout(() => {
-      setCurrentMood(digitalAnimation);
-    }, 10000);
-    return () => clearTimeout(idleTimer);
-  }, [messages, isTyping]);
+        next = AI_ANIMATIONS[Math.floor(Math.random() * AI_ANIMATIONS.length)];
+      } while (next === prev);
+      return next;
+    });
+  }, 10000); // 10 seconds
+
+  return () => clearInterval(interval);
+}, [isTyping]);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-zinc-950 via-slate-900 to-zinc-950 p-4 grid grid-cols-3 gap-4 relative text-white">
