@@ -12,7 +12,6 @@ A modern AI-style chatbot built with **React**, **TypeScript**, **Tailwind CSS**
 - Predefined quick questions & custom input  
 - Lottie animation panel for AI moods  
 - Toggleable mini-game inside chat  
-- Mobile responsive & modern glassmorphism UI  
 
 ---
 
