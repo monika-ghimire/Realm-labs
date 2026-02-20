@@ -12,6 +12,12 @@ export interface Message {
   content: string;
 }
 
+interface PageProps {
+  messages: Message[];
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  isTyping: boolean;
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
+}
 const PREDEFINED_QA: { q: string; a: string }[] = [
   { q: "What can you help me with?", a: "I can help you design UI, write code, debug issues, and brainstorm ideas." },
   { q: "How do I structure a React app?", a: "Break it into reusable components, colocate logic, and keep state close to where it's used." },
@@ -21,16 +27,12 @@ const PREDEFINED_QA: { q: string; a: string }[] = [
   { q: "How to animate UI smoothly?", a: "Use Framer Motion for layout and presence animations with easing and staggered transitions." },
   { q: "How to manage forms in React?", a: "Use controlled inputs, validate early, and provide instant feedback." },
   { q: "What makes a UI feel premium?", a: "Consistent spacing, soft shadows, subtle glows, smooth animations, and thoughtful colors." },
-  { q: "How to optimize performance?", a: "Memoize heavy components, split code, and avoid unnecessary re-renders." },
-  { q: "How to design for mobile first?", a: "Start with small screens, prioritize content, and enhance for larger screens." },
 ];
 
 const uid = () => crypto.randomUUID();
 
-export default function Page() {
-  const [messages, setMessages] = useState<Message[]>([]);
+export default function Page({ messages, setMessages, isTyping, setIsTyping }: PageProps) {
   const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export default function Page() {
           {isTyping && <span className="ml-auto text-xs text-cyan-400">AI is typing...</span>}
         </div>
 
-        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto hide-scroll-bar p-4 space-y-3">
           <AnimatePresence initial={false}>
             {messages.map((m) => (
               <motion.div
@@ -102,7 +104,7 @@ export default function Page() {
         </div>
 
         <div className="p-3 border-t border-white/10 space-y-2">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {PREDEFINED_QA.map((q) => (
               <button
                 key={q.q}

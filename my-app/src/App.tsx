@@ -1,17 +1,14 @@
-
-import './App.css'
-import  Page  from './page/Chatbot'
+import "./App.css";
+import MainPage from "./page/mainPage";
 
 function App() {
-  
-
   return (
     <>
       <div>
-        <Page  />
-       </div>
+        <MainPage />
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,5 +1,5 @@
 // ChatBubble.tsx
-import type { Role } from "./page/Chatbot"; // <-- type-only import
+import type { Role } from "./Chatbot"
 import { motion } from "framer-motion";
 
 interface ChatBubbleProps {
